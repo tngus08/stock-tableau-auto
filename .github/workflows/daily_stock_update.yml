@@ -1,0 +1,36 @@
+name: Daily Stock Update
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '0 23 * * *'
+
+jobs:
+  update-stock:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Script
+        env:
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          TABLEAU_SERVER_URL: ${{ secrets.TABLEAU_SERVER_URL }}
+          TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
+          TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_TOKEN_NAME }}
+          TABLEAU_TOKEN_VALUE: ${{ secrets.TABLEAU_TOKEN_VALUE }}
+          TABLEAU_PROJECT_NAME: ${{ secrets.TABLEAU_PROJECT_NAME }}
+          PUBLISH_TO_TABLEAU: "true"
+
+        run: python main.py
