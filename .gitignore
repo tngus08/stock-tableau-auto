@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+
+stock_daily.hyper
+stock_daily_preview.csv
+update_log.txt
